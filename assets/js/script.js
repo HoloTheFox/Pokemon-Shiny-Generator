@@ -1,32 +1,54 @@
 /**
- * Created by Ruben on 15/02/2017.
+ * Created by Ruben on 10/12/2016.
  */
 
-var persoon = {Name:"", Email:"", Country:"", Gender:""};
+var pokemon = ["Bewear", "Carbink", "Emolga", "Goodra", "Grimer-Alola", "Krookodile", "Lapras", "Masquerain", "Mimikyu",
+    "Primarina", "Raichu-Alola", "Ribombee", "Silvally", "Starmie", "Toxapex", "Tsareena", "Umbreon",
+    "Whimsicott", "Wigglytuff", "Wishiwashi-Solo"];
 
-var submitHandler = function (e) {
+var amountOfPokemon = pokemon.length;
+
+var generatePokemonHandler = function (e) {
     e.preventDefault();
-    $("input:not([type='submit'],[type='radio']), input[type='radio']:checked, select").each(function (i) {
-        if (i === 2)
-        {
-            persoon[Object.keys(persoon)[i]] = $(this).find('option:selected').text();
-        } else {
-            persoon[Object.keys(persoon)[i]] = $(this).val();
-        }
+    var generatedPokemonIndex = parseInt(Math.random() * 20);
+    var generatedPokemonName = pokemon[generatedPokemonIndex];
+    var cleanedUpName = pokemon[generatedPokemonIndex];
 
-    });
-    alert(persoonGegevens());
-};
-
-var persoonGegevens = function () {
-    var generatedGegevens = "";
-    generatedGegevens += "Input received\n";
-    for (i in persoon) {
-        generatedGegevens += "\n" + i + ": " + persoon[i];
+    if (cleanedUpName.indexOf("-") != -1) {
+        cleanedUpName = cleanedUpName.replace("-", " ").concat(" form")
     }
-    return generatedGegevens;
+
+    $(this).css("float", "right");
+
+    $(".generated").slideDown().children("img")
+        .attr("src", "images/" + generatedPokemonName + ".png")
+        .attr("alt", generatedPokemonName )
+        .attr("title", generatedPokemonName)
+        .parent().children("div.menu").children("p").text("Name: " + cleanedUpName);
 };
+
+var clickHandler = function () {
+    $("div.menu").slideToggle();
+};
+
+var changePictureWishi = function (e) {
+    if ($(this).attr("alt") == "Wishiwashi-Solo") {
+        $(this).attr("src", "images/Wishiwashi-School.png").attr("alt", "Wishiwashi-School").attr("title", "Wishiwashi-School").parent().find("div.menu").children("p").text("Name: Wishiwashi School form");
+    }
+
+};
+
+var changePictureWishiBack = function (e) {
+    if ($(this).attr("alt") == "Wishiwashi-School") {
+        $(this).attr("src", "images/Wishiwashi-Solo.png").attr("alt", "Wishiwashi-Solo").attr("title", "Wishiwashi-Solo").parent().find("div.menu").children("p").text("Name: Wishiwashi Solo form");
+    }
+
+};
+
+
 
 $(document).ready(function () {
-    $("form").on("submit", submitHandler);
+    $(".generateButton").on("click", generatePokemonHandler).parent().parent().siblings("header").children("h2").append(amountOfPokemon);
+    $("div.generated").on("click" , clickHandler).children("img").css('width', '600px').css('height','auto').on("mouseenter", changePictureWishi).on("mouseleave", changePictureWishiBack);
+
 });
